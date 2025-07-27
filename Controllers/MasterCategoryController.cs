@@ -9,7 +9,7 @@ namespace wms_back_end.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class MasterCategoryController(IConfiguration configuration) : Controller
+    public class MasterUserController(IConfiguration configuration) : Controller
     {
         readonly PolmanAstraLibrary.PolmanAstraLibrary lib = new(configuration.GetConnectionString("DefaultConnection"));
         readonly LDAPAuthentication adAuth = new(configuration);
@@ -17,12 +17,12 @@ namespace wms_back_end.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult GetDataCategory([FromBody] dynamic data)
+        public IActionResult GetDataUser([FromBody] dynamic data)
         {
             try
             {
                 JObject value = JObject.Parse(data.ToString());
-                dt = lib.CallProcedure("wms_getDataCategory", EncodeData.HtmlEncodeObject(value));
+                dt = lib.CallProcedure("wms_getDataUser", EncodeData.HtmlEncodeObject(value));
                 return Ok(JsonConvert.SerializeObject(dt));
             }
             catch { return BadRequest(); }
@@ -30,12 +30,12 @@ namespace wms_back_end.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult CreateCategory([FromBody] dynamic data)
+        public IActionResult GetDataUserById([FromBody] dynamic data)
         {
             try
             {
                 JObject value = JObject.Parse(data.ToString());
-                dt = lib.CallProcedure("wms_createCategory", EncodeData.HtmlEncodeObject(value));
+                dt = lib.CallProcedure("wms_getDataUserById", EncodeData.HtmlEncodeObject(value));
                 return Ok(JsonConvert.SerializeObject(dt));
             }
             catch { return BadRequest(); }
@@ -43,12 +43,12 @@ namespace wms_back_end.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult UpdateCategory([FromBody] dynamic data)
+        public IActionResult CreateUser([FromBody] dynamic data)
         {
             try
             {
                 JObject value = JObject.Parse(data.ToString());
-                dt = lib.CallProcedure("wms_editCategory", EncodeData.HtmlEncodeObject(value));
+                dt = lib.CallProcedure("wms_createUser", EncodeData.HtmlEncodeObject(value));
                 return Ok(JsonConvert.SerializeObject(dt));
             }
             catch { return BadRequest(); }
@@ -56,12 +56,25 @@ namespace wms_back_end.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult deleteCategory([FromBody] dynamic data)
+        public IActionResult UpdateUser([FromBody] dynamic data)
         {
             try
             {
                 JObject value = JObject.Parse(data.ToString());
-                dt = lib.CallProcedure("wms_deleteCategory", EncodeData.HtmlEncodeObject(value));
+                dt = lib.CallProcedure("wms_editUser", EncodeData.HtmlEncodeObject(value));
+                return Ok(JsonConvert.SerializeObject(dt));
+            }
+            catch { return BadRequest(); }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult SetStatusUser([FromBody] dynamic data)
+        {
+            try
+            {
+                JObject value = JObject.Parse(data.ToString());
+                dt = lib.CallProcedure("wms_setStatusUser", EncodeData.HtmlEncodeObject(value));
                 return Ok(JsonConvert.SerializeObject(dt));
             }
             catch { return BadRequest(); }
